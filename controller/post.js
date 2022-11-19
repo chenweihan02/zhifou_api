@@ -37,7 +37,14 @@ const getPostPageByColumnId = (cid,currentPage, pageSize) => {
 }
 
 
-// ========================================================================
+// 创建文章
+const createPost = ({author_id, column_id, title, excerpt, content, img_url, created_time}) => {
+  // const sql = `insert into table_post(title, content, imgUrl, editor, createtime, columnid) values('${title}', '${content}', '${imgUrl}', '${editor}', '${createTime}', '${columnId}')`
+  let sql = `insert into table_post(author_id, column_id, title, excerpt, content, img_url, created_time)`
+  sql += ` values('${author_id}', '${column_id}', '${title}', '${excerpt}', '${content}', '${img_url}', '${created_time}')`
+  return execSql(sql)
+}
+
 
 // 通过id获取对应文章
 const getPost = (id) => {
@@ -45,11 +52,11 @@ const getPost = (id) => {
   return execSql(sql)
 }
 
-// 创建文章
-const createPost = ({title, content, imgUrl, editor, createTime, columnId}) => {
-  const sql = `insert into table_post(title, content, imgUrl, editor, createtime, columnid) values('${title}', '${content}', '${imgUrl}', '${editor}', '${createTime}', '${columnId}')`
-  return execSql(sql)
-}
+
+// ========================================================================
+
+
+
 
 
 const deletePost = (id) => {

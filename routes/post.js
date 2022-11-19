@@ -31,7 +31,7 @@ router.get('/list', async (req, res) => {
   res.send(result)
 })
 
-//===================================================
+
 
 // cid/post/
 
@@ -64,6 +64,40 @@ router.get('/page', async (req, res) => {
 })
 
 
+// 新建文章 
+//TODO 返回该文章的内容
+router.post('/create', async (req, res) => {
+  console.log('data', req.body)
+  const postData = req.body
+  const img_url = postData.img_url || ''
+  const created_time = currentTime()
+  // author_id, column_id, title, excerpt, content
+  const result = await createPost({
+    ...postData,
+    img_url, 
+    created_time
+  }).then((sqlData) => {
+    return successData(sqlData[0], '文章创建成功！')
+  }
+  ).catch(err => failData(err))
+
+  res.status(201).send(result)
+})
+
+
+// 文章详情
+router.get('/detail', async (req, res) => {
+  const id = getData(req).get('id')
+  const result = await getPost(id).then(sqlData => {
+    if (sqlData.length > 0) {
+      return successData(sqlData[0], '请求成功')
+    }
+    return failData('该文章不存在!')
+  }).catch(err => failData(err))
+  res.send(result)
+})
+
+//===================================================
 // // 文章详情
 // router.get('/detail', async (req, res) => {
 //   const id = getData(req).get('id')
@@ -76,23 +110,7 @@ router.get('/page', async (req, res) => {
 //   res.send(result)
 // })
 
-// // 新建文章
-// router.post('/create', async (req, res) => {
-//   console.log('data', req.body)
-//   const postData = req.body
-//   const imgUrl = postData.imgUrl || ''
-//   const editor = postData.editor || ''
-//   const createTime = currentTime()
-//   const result = await createPost({
-//     ...postData,
-//     imgUrl, 
-//     editor,
-//     createTime
-//   }).then(() => {return successData('msg', '文章创建成功！',editor)}
-//   ).catch(err => failData(err))
 
-//   res.status(201).send(result)
-// })
 
 // //上传文件
 // // 图片上传
